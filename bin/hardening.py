@@ -19,8 +19,10 @@ def symlink_log(log_file):
                 os.symlink('/dev/stdout', log_file)
 
 # generate config file, defaulting to run user and group, not root, and allowing to skip permission setting
-def gen_cfg_no_chown(tmpl, target, env, user=None, group=None, mode=0o644, skip_set_perms=False):
-    # ignore user and group
+def gen_cfg_no_chown(tmpl, target, env, user='root', group='root', mode=0o644, overwrite=True):
+    if not overwrite and os.path.exists(target):
+        logging.info(f"{target} exists; skipping.")
+        return
     logging.info(f"Generating {target} from template {tmpl} (no chown)")
     # Setup Jinja2 for templating
     jenv = j2.Environment(
@@ -33,6 +35,7 @@ def gen_cfg_no_chown(tmpl, target, env, user=None, group=None, mode=0o644, skip_
         logging.info(f"Owner of {target} is {get_owner(target)}; not attempting to change permissions")
     else:
         os.chmod(target, mode)
+    # ignore user and group
 
 # Get the Jira logs out to stdout
 def all_logs_to_stdout():
