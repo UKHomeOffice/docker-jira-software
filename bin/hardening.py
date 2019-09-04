@@ -45,4 +45,8 @@ def all_logs_to_stdout():
         os.makedirs(logs_folder)
     symlink_log(f"{logs_folder}/atlassian-greenhopper.log")
     symlink_log(f"{logs_folder}/atlassian-jira.log")
+    symlink_log(f"{logs_folder}/atlassian-jira-apdex.log")
+    symlink_log(f"{logs_folder}/atlassian-jira-incoming-mail.log")
     symlink_log(f"{logs_folder}/atlassian-jira-security.log")
+    symlink_log(f"{logs_folder}/atlassian-jira-slow-queries.log")
+    symlink_log(f"{logs_folder}/atlassian-servicedesk.log")
