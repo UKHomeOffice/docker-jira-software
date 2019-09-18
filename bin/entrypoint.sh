@@ -69,16 +69,21 @@ if [ "${CLUSTERED}" == "true" ]; then
     set_cluster_property "ehcache.multicast.hostName" "${EHCACHE_MULTICAST_HOSTNAME}"
 fi
 
+function log_to_stdout {
+    log_file=$1
+    rm -rf $log_file
+    ln -s /dev/stdout $log_file
+}
 
 JIRA_LOGS=${JIRA_HOME}/log
 mkdir -p $JIRA_LOGS
-ln -s /dev/stdout ${JIRA_LOGS}/atlassian-greenhopper.log
-ln -s /dev/stdout ${JIRA_LOGS}/atlassian-jira.log
-ln -s /dev/stdout ${JIRA_LOGS}/atlassian-jira-apdex.log
-ln -s /dev/stdout ${JIRA_LOGS}/atlassian-jira-incoming-mail.log
-ln -s /dev/stdout ${JIRA_LOGS}/atlassian-jira-security.log
-ln -s /dev/stdout ${JIRA_LOGS}/atlassian-jira-slow-queries.log
-ln -s /dev/stdout ${JIRA_LOGS}/atlassian-servicedesk.log
+log_to_stdout ${JIRA_LOGS}/atlassian-greenhopper.log
+log_to_stdout ${JIRA_LOGS}/atlassian-jira.log
+log_to_stdout ${JIRA_LOGS}/atlassian-jira-apdex.log
+log_to_stdout ${JIRA_LOGS}/atlassian-jira-incoming-mail.log
+log_to_stdout ${JIRA_LOGS}/atlassian-jira-security.log
+log_to_stdout ${JIRA_LOGS}/atlassian-jira-slow-queries.log
+log_to_stdout ${JIRA_LOGS}/atlassian-servicedesk.log
 
 # Start Jira as the correct user
 if [ "${UID}" -eq 0 ]; then
