@@ -1,4 +1,4 @@
-FROM dchevell/jira-software:7.5.4
+FROM dchevell/jira-software:7.6.14
 
 # The id of the jira user is 2001
 RUN chown -R 2001:2001 /opt/atlassian
