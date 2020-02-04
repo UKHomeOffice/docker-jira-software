@@ -6,6 +6,14 @@ import time
 import jinja2 as j2
 from pwd import getpwuid
 
+env = {k.lower(): v
+       for k, v in os.environ.items()}
+
+
+# Setup Jinja2 for templating
+jenv = j2.Environment(
+    loader=j2.FileSystemLoader('/opt/atlassian/etc/'),
+    autoescape=j2.select_autoescape(['xml']))
 
 # Find owner of a file
 def get_owner(filename):
@@ -19,23 +27,21 @@ def symlink_log(log_file):
                 os.symlink('/dev/stdout', log_file)
 
 # generate config file, defaulting to run user and group, not root, and allowing to skip permission setting
-def gen_cfg_no_chown(tmpl, target, env, user='root', group='root', mode=0o644, overwrite=True):
+def gen_cfg_no_chown(tmpl, target, user='root', group='root', mode=0o644, overwrite=True):
     if not overwrite and os.path.exists(target):
         logging.info(f"{target} exists; skipping.")
         return
-    logging.info(f"Generating {target} from template {tmpl} (no chown)")
-    # Setup Jinja2 for templating
-    jenv = j2.Environment(
-        loader=j2.FileSystemLoader('/opt/atlassian/etc/'),
-        autoescape=j2.select_autoescape(['xml']))
+
+    logging.info(f"Generating {target} from template {tmpl}")
     cfg = jenv.get_template(tmpl).render(env)
-    with open(target, 'w') as fd:
-        fd.write(cfg)
-    if get_owner(target) == 'root':
-        logging.info(f"Owner of {target} is {get_owner(target)}; not attempting to change permissions")
-    else:
-        os.chmod(target, mode)
-    # ignore user and group
+    try:
+        with open(target, 'w') as fd:
+            fd.write(cfg)
+    except (OSError, PermissionError):
+        logging.warning(f"Container not started as root. Bootstrapping skipped for '{target}'")
+    # don't change the perms as running as non-privileged user already
+    # else:
+    #     set_perms(target, user, group, mode)
 
 # Get the Jira logs out to stdout
 def all_logs_to_stdout():
