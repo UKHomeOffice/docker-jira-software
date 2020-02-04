@@ -22,6 +22,12 @@ RUN sed -i '/from entrypoint_helpers/a from hardening import gen_cfg_no_chown, a
 COPY bin/check_signatures.sh /
 RUN chmod +x /check_signatures.sh && /check_signatures.sh
 
+# modify the server.xml template to include a parameterized valve timeout
+RUN sed -i '/org.apache.catalina.valves.StuckThreadDetectionValve/{N;s/threshold=".*"/threshold="{{ atl_tomcat_stuck_thread_detection_valve_timeout | default('"'"'60'"'"') }}"/}' \
+       ${ATLASSIAN_INSTALL_DIR}/etc/server.xml.j2 && \
+       sed -i '/redirectPort=/i debug="0"' ${ATLASSIAN_INSTALL_DIR}/etc/server.xml.j2 && \
+       sed -i '/redirectPort=/i URIEncoding="UTF-8"' ${ATLASSIAN_INSTALL_DIR}/etc/server.xml.j2
+
 USER 2001
 
 CMD ["/bin/sh", "-c", "ATL_JDBC_URL=jdbc:${JIRA_JDBC_URL_DRIVER}://${JIRA_DB_ENDPOINT}:${JIRA_DB_PORT}/${JIRA_DB_NAME} /entrypoint.py -fg"]
