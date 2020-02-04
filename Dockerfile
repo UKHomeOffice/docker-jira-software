@@ -1,5 +1,8 @@
 FROM atlassian/jira-software:7.13.11
 
+ENV ATLASSIAN_INSTALL_DIR /opt/atlassian
+ENV JIRA_HOME /var/atlassian/application-data/jira
+
 # The id of the jira user is 2001
 RUN chown -R 2001:2001 /opt/atlassian
 
