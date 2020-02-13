@@ -32,6 +32,7 @@ RUN sed -i '/org.apache.catalina.valves.StuckThreadDetectionValve/{N;s/threshold
 
 RUN sed -i 's/JVM_SUPPORT_RECOMMENDED_ARGS:=""/JVM_SUPPORT_RECOMMENDED_ARGS:="-Dmail.imaps.auth.ntlm.disable=true -Dmail.imaps.auth.gssapi.disable=true"/' /opt/atlassian/jira/bin/setenv.sh
 
+
 USER 2001
 
 CMD ["/bin/sh", "-c", "ATL_JDBC_URL=jdbc:${JIRA_JDBC_URL_DRIVER}://${JIRA_DB_ENDPOINT}:${JIRA_DB_PORT}/${JIRA_DB_NAME} /entrypoint.py -fg"]
