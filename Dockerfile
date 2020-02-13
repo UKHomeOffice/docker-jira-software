@@ -31,7 +31,7 @@ RUN sed -i '/org.apache.catalina.valves.StuckThreadDetectionValve/{N;s/threshold
        sed -i '/redirectPort=/i debug="0"' ${ATLASSIAN_INSTALL_DIR}/etc/server.xml.j2 && \
        sed -i '/redirectPort=/i URIEncoding="UTF-8"' ${ATLASSIAN_INSTALL_DIR}/etc/server.xml.j2
 
-RUN sed -i 's/^JVM_SUPPORT_RECOMMENDED_ARGS:=""/JVM_SUPPORT_RECOMMENDED_ARGS:="-Dmail.imaps.auth.ntlm.disable=true -Dmail.imaps.auth.gssapi.disable=true"/' /opt/atlassian/jira/bin/setenv.sh
+RUN sed -i 's/JVM_SUPPORT_RECOMMENDED_ARGS:=""/JVM_SUPPORT_RECOMMENDED_ARGS:="-Dmail.imaps.auth.ntlm.disable=true -Dmail.imaps.auth.gssapi.disable=true"/' /opt/atlassian/jira/bin/setenv.sh
 
 USER 2001
 
