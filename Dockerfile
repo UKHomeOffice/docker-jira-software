@@ -29,8 +29,6 @@ RUN sed -i '/org.apache.catalina.valves.StuckThreadDetectionValve/{N;s/threshold
        ${ATLASSIAN_INSTALL_DIR}/etc/server.xml.j2 && \
        sed -i '/redirectPort=/i debug="0"' ${ATLASSIAN_INSTALL_DIR}/etc/server.xml.j2 && \
        sed -i '/redirectPort=/i URIEncoding="UTF-8"' ${ATLASSIAN_INSTALL_DIR}/etc/server.xml.j2 && \
-       sed -i '/disableUploadTimeout="true" \/>/a \<Connector port="8081"\nmaxThreads="100"\nminSpareThreads="10"\nconnectionTimeout="20000"\nenableLookups="false"\nprotocol="HTTP\/1.1"\ndebug="0"\nredirectPort="8443"\nacceptCount="10"\nsecure="false"\nscheme="http"\nrelaxedPathChars="[]|"\nrelaxedQueryChars="[]|{}^&#x5c;&#x60;&quot;&lt;&gt;"\nbindOnInit="false"\nmaxHttpHeaderSize="8192"\nuseBodyEncodingForURI="true"\ndisableUploadTimeout="true" \/>' \
-              ${ATLASSIAN_INSTALL_DIR}/etc/server.xml.j2
 
 RUN sed -i 's/JVM_SUPPORT_RECOMMENDED_ARGS:=""/JVM_SUPPORT_RECOMMENDED_ARGS:="-Dmail.imaps.auth.ntlm.disable=true -Dmail.imaps.auth.gssapi.disable=true"/' /opt/atlassian/jira/bin/setenv.sh
 
