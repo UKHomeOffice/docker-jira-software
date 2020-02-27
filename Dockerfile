@@ -1,4 +1,4 @@
-FROM atlassian/jira-software:7.13.11
+FROM atlassian/jira-software:7.13.12
 
 ENV ATLASSIAN_INSTALL_DIR /opt/atlassian
 ENV JIRA_HOME /var/atlassian/application-data/jira
@@ -9,6 +9,7 @@ RUN chown -R 2001:2001 /opt/atlassian
 COPY bin/hardening.py /hardening.py
 # modify the original entrypoint.py to call our hardening functions
 RUN sed -i '/from entrypoint_helpers/a from hardening import gen_cfg_no_chown' /entrypoint.py && \
+    sed -i '/start_app(/i all_logs_to_stdout()' /entrypoint.py && \
     sed -i 's/gen_cfg(/gen_cfg_no_chown(/' /entrypoint.py && \
     sed -i '/1catalina.org.apache.juli.FileHandler.rotatable/d' /opt/atlassian/jira/conf/logging.properties && \
     sed -i '/1catalina.org.apache.juli.AsyncFileHandler.level/i 1catalina.org.apache.juli.FileHandler.rotatable = false' /opt/atlassian/jira/conf/logging.properties && \
