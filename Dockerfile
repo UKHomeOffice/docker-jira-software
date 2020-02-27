@@ -8,7 +8,7 @@ RUN chown -R 2001:2001 /opt/atlassian
 
 COPY bin/hardening.py /hardening.py
 # modify the original entrypoint.py to call our hardening functions
-RUN sed -i '/from entrypoint_helpers/a from hardening import gen_cfg_no_chown' /entrypoint.py && \
+RUN sed -i '/from entrypoint_helpers/a from hardening import gen_cfg_no_chown, all_logs_to_stdout' /entrypoint.py && \
     sed -i '/start_app(/i all_logs_to_stdout()' /entrypoint.py && \
     sed -i 's/gen_cfg(/gen_cfg_no_chown(/' /entrypoint.py && \
     sed -i '/1catalina.org.apache.juli.FileHandler.rotatable/d' /opt/atlassian/jira/conf/logging.properties && \
