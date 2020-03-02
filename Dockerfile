@@ -1,4 +1,4 @@
-FROM atlassian/jira-software:8.7.1
+FROM atlassian/jira-software:8.5.3
 
 ENV ATLASSIAN_INSTALL_DIR /opt/atlassian
 ENV JIRA_HOME /var/atlassian/application-data/jira
